@@ -1,0 +1,32 @@
+{
+  "createdBy": {
+    "GitHub": "https://github.com/mangroveprot",
+    "Facebook": "www.facebook.com/gerald.c.villaver"
+  },
+  "admin": {
+    "author": "ViLLAVER",
+    "adminsBot": [
+      "100055592632190",
+      "100040690662149",
+      "100027876517873"
+    ],
+    "API": "http://ger1.deploy.sbs:55570"
+  },
+  "settings": {
+    "system": true,
+    "autoreact": true,
+    "antileave": true,
+    "antiunsend": false,
+    "listenEvents": true,
+    "selfListen": false,
+    "autoMarkRead": false,
+    "autoMarkDelivery": false,
+    "forceLogin": true
+  },
+  "assistant": {
+    "botNickName": "Assistant",
+    "prefix": ".",
+    "hasPrefix": true,
+    "autoRestartTime": 3600000
+  }
+}
