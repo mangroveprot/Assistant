@@ -1,9 +1,5 @@
 const axios = require("axios");
-const {
-  getStreamFromURL,
-  getName,
-  API
-} = global.utils;
+const { getStreamFromURL, getName, API } = global.utils;
 
 module.exports = {
   config: {
@@ -15,9 +11,7 @@ module.exports = {
     description: "Search for images on google image.",
     category: "wiki",
   },
-  onStart: async function ({
-    api, event, args
-  }) {
+  onStart: async function ({ api, event, args }) {
     const userID = event.senderID;
     const name = await getName(api, userID);
     const prompt = args.join(" ");
@@ -29,8 +23,7 @@ module.exports = {
           event.messageID
         );
       }
-      let query,
-      numResults;
+      let query, numResults;
       if (prompt.includes("|")) {
         const keySearchs = prompt.substr(0, prompt.indexOf("|")).trim();
         let numberSearch = parseInt(prompt.split("|").pop().trim()) || 6;
@@ -57,7 +50,11 @@ module.exports = {
         event.messageID
       );
 
-      const res = await axios.get(`${API}/api/gimage?search=${encodeURIComponent(query)}&limit=${numResults}&name=${name}&uid=${userID}`);
+      const res = await axios.get(
+        `${API}/api/gimage?search=${encodeURIComponent(
+          query
+        )}&limit=${numResults}&name=${name}&uid=${userID}`
+      );
       const result = res.data.data;
       const attachment = [];
 

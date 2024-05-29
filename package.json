@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "nodemon index.js",
     "format": "prettier --write .",
     "update": "node update.js"
   },
@@ -30,5 +30,8 @@
     "progress": "^2.0.3",
     "request": "^2.88.2"
   },
-  "description": "A simple messenger bot."
+  "description": "A simple messenger bot.",
+  "devDependencies": {
+    "nodemon": "^3.1.2"
+  }
 }

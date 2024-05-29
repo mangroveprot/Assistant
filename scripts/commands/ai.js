@@ -1,8 +1,5 @@
 const axios = require("axios");
-const {
-  getName,
-  API
-} = global.utils;
+const { getName, API } = global.utils;
 module.exports = {
   config: {
     name: "ai",
@@ -13,9 +10,7 @@ module.exports = {
     cooldown: 10,
   },
 
-  onStart: async function ({
-    api, event, args, message
-  }) {
+  onStart: async function ({ api, event, args, message }) {
     try {
       const userID = event.senderID;
 
@@ -26,16 +21,12 @@ module.exports = {
           "Hello, ano ang iyong katanungan?",
           "Ano ang maitutulong ko?",
           "What is your question?",
-          "Hello! I'm an AI and always ready to chat. How can I assist you today?"
+          "Hello! I'm an AI and always ready to chat. How can I assist you today?",
         ];
 
         const randomResponse =
-        responses[Math.floor(Math.random() * responses.length)];
-        return api.sendMessage(
-          randomResponse,
-          event.threadID,
-          event.messageID
-        );
+          responses[Math.floor(Math.random() * responses.length)];
+        return api.sendMessage(randomResponse, event.threadID, event.messageID);
       }
       const phrases = [
         "🔍 | Just a moment, I'm fetching the best answers for you.",
@@ -47,23 +38,26 @@ module.exports = {
         "✨ | Just a brief pause while I search for the most accurate responses.",
         "🔍 | I'm currently gathering the best answers for you.",
         "✨ | I'm actively fetching the information you're seeking - it won't be long!",
-        "(⁠ ⁠╹⁠▽⁠╹⁠ ⁠)| I'm on it! Just a moment while I fetch the most suitable answers for you."
+        "(⁠ ⁠╹⁠▽⁠╹⁠ ⁠)| I'm on it! Just a moment while I fetch the most suitable answers for you.",
       ];
 
-      const waitQue =
-      phrases[Math.floor(Math.random() * phrases.length)];
+      const waitQue = phrases[Math.floor(Math.random() * phrases.length)];
 
       const waitingMessage = await message.reply(waitQue);
       const name = await getName(api, userID);
 
-      const response = await axios.get(`  ${API}/api/ai?prompt=${prompt}&uid=${userID}&name=${name}`
+      const response = await axios.get(
+        `  ${API}/api/ai?prompt=${prompt}&uid=${userID}&name=${name}`
       );
       const res = response.data.result;
-      message.reply({
-        body: res
-      }, async (err, info) => {
-        await message.unsend((await waitingMessage).messageID);
-      });
+      message.reply(
+        {
+          body: res,
+        },
+        async (err, info) => {
+          await message.unsend((await waitingMessage).messageID);
+        }
+      );
     } catch (error) {
       console.error("Error processing AI request:", error);
       api.sendMessage(

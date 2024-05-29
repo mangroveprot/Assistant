@@ -1,5 +1,5 @@
 //
-const chalk = require('chalk');
+const chalk = require("chalk");
 function handleEvent(admin, api, event) {
   try {
     switch (event.type) {
@@ -12,7 +12,10 @@ function handleEvent(admin, api, event) {
         handleUnsendMessage(api, event);
         break;
       case "message_reaction":
-        console.log(chalk.green("MESSAGE_REACTION:"), formatMessageReaction(event));
+        console.log(
+          chalk.green("MESSAGE_REACTION:"),
+          formatMessageReaction(event)
+        );
         handleMessageReaction(admin, api, event);
         break;
       case "typ":
@@ -24,15 +27,13 @@ function handleEvent(admin, api, event) {
         break;
       case "read_receipt":
         formatReadReceipt(event);
-        handleReadReceipt(api,
-          event);
+        handleReadReceipt(api, event);
         break;
       default:
         break;
     }
   } catch (error) {
-    console.error(chalk.red("Error in handleEvent:"),
-      error);
+    console.error(chalk.red("Error in handleEvent:"), error);
   }
 }
 
@@ -91,7 +92,11 @@ function handleMessageReaction(admin, api, event) {
     api.removeUserFromGroup(event.senderID, event.threadID, (err) => {
       if (err) return console.log(err);
     });
-  } else if (event.reaction == "❌" && event.senderID == api.getCurrentUserID() && admin.includes(event.userID)) {
+  } else if (
+    event.reaction == "❌" &&
+    event.senderID == api.getCurrentUserID() &&
+    admin.includes(event.userID)
+  ) {
     api.unsendMessage(event.messageID);
   }
 }
@@ -129,5 +134,5 @@ function handleUnsendMessage(api, event) {
 }
 
 module.exports = {
-  handleEvent
+  handleEvent,
 };

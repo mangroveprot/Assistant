@@ -1,8 +1,6 @@
-const fs = require('fs');
-const path = require('path');
-const {
-  adminsBot
-} = global.utils;
+const fs = require("fs");
+const path = require("path");
+const { adminsBot } = global.utils;
 module.exports = {
   config: {
     name: "del",
@@ -13,20 +11,21 @@ module.exports = {
     description: "Delete file at cmds",
     category: "owner",
     usage: " {p}{n} <cmd>",
-    example: "del ai"
+    example: "del ai",
   },
 
-  onStart: async function ({
-    args, message, event
-  }) {
-
+  onStart: async function ({ args, message, event }) {
     if (!adminsBot.includes(event.senderID)) {
-      message.reply("You don't have enough permission to use this command. Only Ohio can do it.");
+      message.reply(
+        "You don't have enough permission to use this command. Only Ohio can do it."
+      );
       return;
     }
 
-    const fileNamesString = args.join
-    const fileNames = fileNamesString.split(',').map(fileName => fileName.trim());
+    const fileNamesString = args.join;
+    const fileNames = fileNamesString
+      .split(",")
+      .map((fileName) => fileName.trim());
 
     if (fileNames.length === 0) {
       return message.reply("Type the file name(s) separated by commas.");
@@ -36,7 +35,7 @@ module.exports = {
     const notFoundFiles = [];
 
     fileNames.forEach((fileName) => {
-      const filePath = path.join(__dirname, '..', 'cmds', `${fileName}.js`);
+      const filePath = path.join(__dirname, "..", "cmds", `${fileName}.js`);
 
       if (fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
@@ -49,13 +48,17 @@ module.exports = {
     let replyMessage = "";
 
     if (deletedFiles.length > 0) {
-      replyMessage += `✅️ | Command file(s) have been deleted: ${deletedFiles.join(', ')}\n`;
+      replyMessage += `✅️ | Command file(s) have been deleted: ${deletedFiles.join(
+        ", "
+      )}\n`;
     }
 
     if (notFoundFiles.length > 0) {
-      replyMessage += `Command file(s) not found: ${notFoundFiles.join(', ')}\n`;
+      replyMessage += `Command file(s) not found: ${notFoundFiles.join(
+        ", "
+      )}\n`;
     }
 
     message.reply(replyMessage);
-  }
+  },
 };

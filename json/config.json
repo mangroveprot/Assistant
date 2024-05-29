@@ -26,7 +26,7 @@
   "assistant": {
     "botNickName": "Assistant",
     "prefix": ".",
-    "hasPrefix": true,
+    "hasPrefix": false,
     "autoRestartTime": 3600000
   }
 }
