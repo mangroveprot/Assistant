@@ -5,12 +5,8 @@
   },
   "admin": {
     "author": "ViLLAVER",
-    "adminsBot": [
-      "100055592632190",
-      "100040690662149",
-      "100027876517873"
-    ],
-    "API": "http://ger1.deploy.sbs:55570"
+    "adminsBot": ["100055592632190", "100040690662149", "100027876517873"],
+    "API": "https://xsjcw5-5000.csb.app"
   },
   "settings": {
     "system": true,
@@ -27,6 +23,10 @@
     "botNickName": "Assistant",
     "prefix": ".",
     "hasPrefix": false,
-    "autoRestartTime": 3600000
+    "autoRestartTime": 3600000,
+    "mongodbURI": ""
+  },
+  "apiKeys": {
+    "geniusKey": "r8qCZf7SAVyw3DUtl8PbnLHu1-qN8Yq83LyUgH9d3-LeUsfERLbCtGibCQB0dTxW"
   }
 }

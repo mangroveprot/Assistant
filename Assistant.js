@@ -2,11 +2,14 @@ const fs = require("fs").promises;
 const path = require("path");
 const express = require("express");
 const chalk = require("chalk");
+
 const log = require("./logger/log.js");
 const assistant_start = require("./0assistant/login.js");
+const { initializeMongoDB } = require("./database/mongoDB.js");
 const eventAction = require("./0assistant/handler/eventAction.js");
 const utils = require("./utils.js");
 const ProgressBar = require("progress");
+const { exit } = require("process");
 
 const app = express();
 global.utils = utils;
@@ -19,6 +22,7 @@ const {
   adminsBot,
   getUserInfo,
   getName,
+  twirlTimer,
 } = global.utils;
 
 process.on("unhandledRejection", console.error);
@@ -120,9 +124,29 @@ async function loadFiles(
   }
 }
 
+async function connectToMongoDB() {
+  const twirlTimerId = twirlTimer("Initializing, please wait... ");
+  try {
+    await initializeMongoDB();
+    clearInterval(twirlTimerId);
+    process.stdout.write("\r ");
+    log.success("Connected to MongoDB!");
+  } catch (error) {
+    clearInterval(twirlTimerId);
+    process.stdout.write("\r ");
+    log.error(error.message);
+    process.exit(1);
+  }
+}
+
 async function assistantStart() {
   //Load the commands and events
   await loadCommandsEvents();
+
+  // Connecting to the database
+
+  console.log(chalk.bold.green(`\nInitialized MongoDB`));
+  await connectToMongoDB();
 
   //
   try {
@@ -262,7 +286,7 @@ async function assistantStart() {
                   commands[name].config && commands[name].config.name === cmds
               );
 
-              //If the command is not exist
+              //return this If the command is not exist
               if (!commandName) {
                 api.sendMessage(
                   `⚠️ Command not found please type "${pfx}help" to show available commands!`,
@@ -299,16 +323,19 @@ async function assistantStart() {
                   threadID
                 );
               }
+              const isBoxOrBotAdmin =
+                (await utils.isInRole1(event, api, senderID, threadID)) ||
+                (await utils.isInRole2(api, senderID));
+
+              const isBotAdmin = await utils.isInRole2(api, senderID);
+
               switch (requiredRole) {
-                case 0:
+                case ROLE_EVERYONE:
                   // Everyone
                   break;
-                case 1:
-                  //Box and Bot Admin
-                  if (
-                    !(await utils.isInRole1(event, api, senderID, threadID)) &&
-                    !(await utils.isInRole2(api, senderID))
-                  ) {
+                case ROLE_BOX_AND_BOT_ADMIN:
+                  // Box and Bot Admin
+                  if (!isBoxOrBotAdmin) {
                     return api.sendMessage(
                       "❗ | Only Box and Bot Admin To Use This Command.",
                       event.threadID,
@@ -316,9 +343,9 @@ async function assistantStart() {
                     );
                   }
                   break;
-                case 2:
-                  //Bot Admin
-                  if (!(await utils.isInRole2(api, senderID))) {
+                case ROLE_BOT_ADMIN:
+                  // Bot Admin
+                  if (!isBotAdmin) {
                     return api.sendMessage(
                       "❗ | Only Bot Admin To Use This Command.",
                       event.threadID,
@@ -328,7 +355,7 @@ async function assistantStart() {
                   break;
                 default:
                   return api.sendMessage(
-                    `Command ${commandName} no valid role include in config.`,
+                    `Command ${commandName} no valid role included in config.`,
                     event.threadID,
                     event.messageID
                   );
