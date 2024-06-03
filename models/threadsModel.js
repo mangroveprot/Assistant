@@ -81,7 +81,7 @@ const init = async (threadID) => {
       return;
     }
 
-    // Create an example document
+    // Create an new thread
     const threadDatas = new threadsDataModel({
       threadName: "Example Thread",
       threadID: threadID,

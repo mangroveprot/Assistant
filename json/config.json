@@ -24,7 +24,7 @@
     "prefix": ".",
     "hasPrefix": false,
     "autoRestartTime": 3600000,
-    "mongodbURI": ""
+    "mongodbURI": "__add your mongodb URI here__"
   },
   "apiKeys": {
     "geniusKey": "r8qCZf7SAVyw3DUtl8PbnLHu1-qN8Yq83LyUgH9d3-LeUsfERLbCtGibCQB0dTxW"
